@@ -10,13 +10,34 @@ that copies the project to user specified path and set it's name. For more infor
 
 
 
-## How to use example
-We encourage the users to use the example as a template for the new projects.
-A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
+##  ▶️  Run project
+1. Clone the repository to your local machine:
+``` bash
+git clone https://github.com/rennysonc/embarcados-projeto-3.git
+```
 
-## Example folder contents
+2. Navigate to the project directory:
+``` bash
+cd embarcados-projeto-3
+```
 
-The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
+3. Open the ESP-IDF
+
+4. Select: **Configure ESP-IDF Extension**
+   
+5. Select: **Use Existing Setup**
+   
+6. Select: **Advanced / Add .vscode subdirectory files**
+   
+7. Select: **Build**
+
+8. Close the ESP-IDF
+   
+9. Verify the status of build
+
+## 📁 Project Structure
+
+The project **embarcados-projeto-3** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
 
 ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
 files that provide set of directives and instructions describing the project's source files and targets
@@ -25,12 +46,35 @@ files that provide set of directives and instructions describing the project's s
 Below is short explanation of remaining files in the project folder.
 
 ```
-├── CMakeLists.txt
-├── main
-│   ├── CMakeLists.txt
-│   └── main.c
-└── README.md                  This is the file you are currently reading
+├── build/
+│   # Pasta onde os arquivos compilados são armazenados
+│
+├── components/
+│   ├── servo_tools/
+│   │   ├── include/
+│   │   │   └── servo_tools.h  # Arquivo de cabeçalho para as funções de controle do servo
+│   │   ├── servo_tools.c      # Arquivo fonte para as funções de controle do servo
+│   │   └── CMakeLists.txt     # Arquivo CMake específico para o
+componente servo_tools
+│   │
+│   └── servo_hw/
+│       ├── include/
+│       │   └── servo_hw.h     # Arquivo de cabeçalho para a abstração de hardware do servo
+│       ├── servo_hw.c         # Arquivo fonte para a abstração de hardware do servo
+│       └── CMakeLists.txt     # Arquivo CMake específico para o componente servo_hw
+│
+├── docs/
+│   ├── documentation.pdf      # PDF com documentação para firmware e bibliotecas
+│   ├── state_machine.png      # Diagrama de máquina de estados para firmware
+│   └── circuit_diagram.jpg    # Diagrama de circuito para firmware │
+├── main/
+│   ├── CMakeLists.txt         # Arquivo CMake para a aplicação principal
+│   └── main.c                 # Arquivo fonte da aplicação principal │
+├── .gitignore                 # Arquivo que especifica quais arquivos ou diretórios devem ser ignorados pelo Git
+│
+├── CMakeLists.txt             # Arquivo CMake principal para todo o projeto
+│
+└── sdkconfig                  # Arquivo de configuração (gerado/gerenciado pelo "make menuconfig")
 ```
-Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
-They are not used or needed when building with CMake and idf.py.
+
 # embarcados-projeto-3
