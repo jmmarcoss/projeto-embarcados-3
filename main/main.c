@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
@@ -28,6 +29,14 @@
 
 static const char *TAG = "IMU_SERVO_CONTROL";
 
+float rad_to_angle(float rad) {
+
+    rad = fmodf(rad + M_PI, 2 * M_PI) - M_PI;
+    float angle_deg = (rad + M_PI) * (180.0f / (2 * M_PI));
+
+    return fmaxf(0.0f, fminf(180.0f, angle_deg));
+}
+
 typedef enum {
     INIT,
     IMU_READ_DATA,
@@ -48,6 +57,7 @@ void app_main(void)
     EulerAngle euler;
     int init_retries = 0;
     ServoConfig servo_roll, servo_pitch;
+    ServoAngle angle_roll, angle_pitch;
 
     while (1) {
         switch (current_state) {
@@ -113,7 +123,8 @@ void app_main(void)
 
             case SET_SERVO_ROLL:
                 {
-                    if (servo_set_angle(&servo_roll, euler.roll) == ESP_OK) {
+                    angle_roll = rad_to_angle(euler.roll);
+                    if (servo_set_angle(&servo_roll, angle_roll) == ESP_OK) {
                         current_state = SET_SERVO_PITCH;
                     } else {
                         current_state = ERROR_SERVO;
@@ -124,7 +135,8 @@ void app_main(void)
 
             case SET_SERVO_PITCH:
                 {
-                    if (servo_set_angle(&servo_pitch, euler.pitch) == ESP_OK) {
+                    angle_pitch = rad_to_angle(euler.pitch);
+                    if (servo_set_angle(&servo_pitch, angle_pitch) == ESP_OK) {
                         current_state = IDLE;
                     } else {
                         current_state = ERROR_SERVO;
@@ -135,7 +147,7 @@ void app_main(void)
 
             case IDLE:
                 ESP_LOGI(TAG, "Roll: %.3f, Pitch: %.3f, Yaw: %.3f", euler.roll, euler.pitch, euler.yaw);
-                vTaskDelay(pdMS_TO_TICKS(DELAY_MS));  // Agurda 1000ms (1s) antes da proxima leitura
+                vTaskDelay(pdMS_TO_TICKS(DELAY_MS));  // Agurda 1000ms antes da proxima leitura
                 current_state = IMU_READ_DATA;
                 break;
 
