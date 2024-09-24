@@ -27,6 +27,17 @@ cd embarcados-projeto-3
    
 9. Verify the status of build
 
+#### Funcionalidades
+- Controle de servo motor.
+- Abstração de hardware para controle de posição
+- Implementação de ferramentas de controle customizadas para servo.
+
+## Requisitos
+
+- **SDK:** Necessário instalar o SDK de desenvolvimento específico para sistemas embarcados utilizado neste projeto (como o ESP-IDF, por exemplo).
+- **Compilador CMake:** Certifique-se de ter o CMake instalado para compilar e gerenciar o build.
+- **Plataforma:** Projetos testados em sistemas Linux ou macOS. Adaptável para outros sistemas operacionais.
+
 ## 📁 Project Structure
 
 The project **embarcados-projeto-3** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
