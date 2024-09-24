@@ -27,7 +27,7 @@ cd embarcados-projeto-3
    
 9. Verify the status of build
 
-#### Funcionalidades
+## Funcionalidades
 - Controle de servo motor.
 - Abstração de hardware para controle de posição
 - Implementação de ferramentas de controle customizadas para servo.
