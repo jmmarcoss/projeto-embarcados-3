@@ -5,7 +5,7 @@
 ##  ▶️  Run project
 1. Clone the repository to your local machine:
 ``` bash
-git clone https://github.com/rennysonc/embarcados-projeto-3.git
+git clone https://github.com/jmmarcoss/projeto-embarcados-3.git
 ```
 
 2. Navigate to the project directory:
