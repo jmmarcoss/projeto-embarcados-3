@@ -19,11 +19,29 @@ esp_err_t imu_calculate_quaternion(const IMUData *data, Quaternion *quaternion) 
 }
 
 esp_err_t imu_calculate_euler_angles(const Quaternion *quaternion, EulerAngle *euler) {
-    // Exemplo simplificado de cálculo dos ângulos de Euler
-    euler->roll = atan2f(2.0f * (quaternion->w * quaternion->x + quaternion->y * quaternion->z),
-                         1.0f - 2.0f * (quaternion->x * quaternion->x + quaternion->y * quaternion->y));
-    euler->pitch = asinf(2.0f * (quaternion->w * quaternion->y - quaternion->z * quaternion->x));
-    euler->yaw = atan2f(2.0f * (quaternion->w * quaternion->z + quaternion->x * quaternion->y),
-                        1.0f - 2.0f * (quaternion->y * quaternion->y + quaternion->z * quaternion->z));
+
+    if (isnan(quaternion->w) || isnan(quaternion->x) || isnan(quaternion->y) || isnan(quaternion->z)) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    float sinr_cosp = 2.0f * (quaternion->w * quaternion->x + quaternion->y * quaternion->z);
+    float cosr_cosp = 1.0f - 2.0f * (quaternion->x * quaternion->x + quaternion->y * quaternion->y);
+    euler->roll = atan2f(sinr_cosp, cosr_cosp);
+
+    float sinp = 2.0f * (quaternion->w * quaternion->y - quaternion->z * quaternion->x);
+    if (fabsf(sinp) >= 1.0f) {
+        euler->pitch = copysignf(M_PI / 2.0f, sinp);
+    } else {
+        euler->pitch = asinf(sinp);
+    }
+
+    float siny_cosp = 2.0f * (quaternion->w * quaternion->z + quaternion->x * quaternion->y);
+    float cosy_cosp = 1.0f - 2.0f * (quaternion->y * quaternion->y + quaternion->z * quaternion->z);
+    euler->yaw = atan2f(siny_cosp, cosy_cosp);
+
+    if (isnan(euler->roll) || isnan(euler->pitch) || isnan(euler->yaw)) {
+        return ESP_FAIL;
+    }
+
     return ESP_OK;
 }

@@ -27,6 +27,20 @@
 
 #define DELAY_MS 1000
 
+static ServoConfig servo_roll = {
+    .gpio_num = SERVO_ROLL_GPIO,
+    .freq_hz = SERVO_ROLL_FREQ,
+    .min_pulse_us = SERVO_ROLL_MIN_PULSE,
+    .max_pulse_us = SERVO_ROLL_MAX_PULSE
+};
+
+static ServoConfig servo_pitch = {
+    .gpio_num = SERVO_PITCH_GPIO,
+    .freq_hz = SERVO_PITCH_FREQ,
+    .min_pulse_us = SERVO_PITCH_MIN_PULSE,
+    .max_pulse_us = SERVO_PITCH_MAX_PULSE
+};
+
 static const char *TAG = "IMU_SERVO_CONTROL";
 
 float rad_to_angle(float rad) {
@@ -56,7 +70,6 @@ void app_main(void)
     Quaternion quaternion;
     EulerAngle euler;
     int init_retries = 0;
-    ServoConfig servo_roll, servo_pitch;
     ServoAngle angle_roll, angle_pitch;
 
     while (1) {
@@ -65,19 +78,6 @@ void app_main(void)
                 ESP_LOGI(TAG, "Initializing IMU...");
                 ESP_LOGI(TAG, "Initializing Servo...");
 
-                ServoConfig servo_roll = {
-                    .gpio_num = SERVO_ROLL_GPIO,
-                    .freq_hz = SERVO_ROLL_FREQ,
-                    .min_pulse_us = SERVO_ROLL_MIN_PULSE,
-                    .max_pulse_us = SERVO_ROLL_MAX_PULSE
-                };
-
-                ServoConfig servo_pitch = {
-                    .gpio_num = SERVO_PITCH_GPIO,
-                    .freq_hz = SERVO_PITCH_FREQ,
-                    .min_pulse_us = SERVO_PITCH_MIN_PULSE,
-                    .max_pulse_us = SERVO_PITCH_MAX_PULSE
-                };
 
                 if (imu_init(ADDR, SDA_PIN, SCL_PIN) == ESP_OK &&
                     servo_init(&servo_roll) == ESP_OK &&
